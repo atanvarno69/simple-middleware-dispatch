@@ -1,0 +1,7 @@
+# Managed by Composer
+composer.lock
+composer.phar
+vendor/
+
+# Managed by CI
+build/
