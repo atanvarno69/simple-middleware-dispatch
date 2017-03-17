@@ -9,28 +9,58 @@
 namespace Atanvarno\Middleware\Dispatch;
 
 /** PSR-7 use block. */
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\{
     ResponseInterface, ServerRequestInterface
 };
 
+/** PSR-15 use block. */
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
+
+/**
+ * Atanvarno\Middleware\Dispatch\Dispatcher
+ *
+ * Interface for PSR-15 middleware dispatchers.
+ *
+ * @api
+ */
 interface Dispatcher
 {
+    /**
+     * Dispatches a request through the middleware queue to return a response.
+     *
+     * Optionally accepts a `callable` to call when the queue becomes empty to
+     * supply to middleware expecting a response from the delegate. This
+     * `callable` MUST return a PSR-7 response. If no end of queue action is
+     * given, an empty PSR-7 will be generated and passed to the middleware.
+     *
+     * @param ServerRequestInterface $request   PSR-7 request.
+     * @param callable|null          $default   End of queue action.
+     * @param array                  $arguments Arguments for end of queue action.
+     *
+     * @return ResponseInterface PSR-7 response.
+     */
     public function dispatch(
         ServerRequestInterface $request,
         callable $default = null,
-        array $args = []
+        array $arguments = []
     ): ResponseInterface;
 
     /**
-     * @return MiddlewareInterface|false
+     * Gets the next middleware in the queue.
+     *
+     * @return MiddlewareInterface|null The next middleware. `null` if the
+     *      queue is empty.
      */
     public function getNextMiddleware();
 
     /**
+     * Gets an empty PSR-7 response with the given error code.
+     *
+     * Uses `500` if the given code is not a valid HTTP error code.
+     *
      * @param int $code HTTP error code.
      *
-     * @return ResponseInterface
+     * @return ResponseInterface PSR-7 response.
      */
     public function getErrorResponse(int $code = 500): ResponseInterface;
 }

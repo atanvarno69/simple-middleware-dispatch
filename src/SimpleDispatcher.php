@@ -16,8 +16,24 @@ use Interop\Http\Factory\{
     ResponseFactoryInterface, StreamFactoryInterface
 };
 
+/**
+ * Atanvarno\Middleware\Dispatch\SimpleDispatcher
+ *
+ * Simple `Dispatcher` implementation that dispatches a queue of middleware.
+ *
+ * @api
+ */
 class SimpleDispatcher extends BaseDispatcher
 {
+    /**
+     * Builds a `SimpleDispatcher` instance.
+     *
+     * Accepts PSR-17 factories and a queue of middleware.
+     *
+     * @param ResponseFactoryInterface $responseFactory PSR-17 response factory.
+     * @param StreamFactoryInterface   $streamFactory   PSR-17 stream factory.
+     * @param MiddlewareInterface[]    ...$middleware   Middleware queue.
+     */
     public function __construct(
         ResponseFactoryInterface $responseFactory,
         StreamFactoryInterface $streamFactory,
@@ -27,19 +43,35 @@ class SimpleDispatcher extends BaseDispatcher
         $this->queue = $middleware;
     }
 
-    public function append(MiddlewareInterface $middleware)
+    /**
+     * Appends a middleware to the queue.
+     *
+     * @param MiddlewareInterface $middleware Middleware to append.
+     *
+     * @return $this Fluent interface.
+     */
+    public function append(MiddlewareInterface $middleware): Dispatcher
     {
         $this->queue[] = $middleware;
+        return $this;
     }
 
-    public function prepend(MiddlewareInterface $middleware)
+    /**
+     * Prepends a middleware to the queue.
+     *
+     * @param MiddlewareInterface $middleware Middleware to prepend.
+     *
+     * @return $this Fluent interface.
+     */
+    public function prepend(MiddlewareInterface $middleware): Dispatcher
     {
         array_unshift($this->queue, $middleware);
+        return $this;
     }
 
+    /** @inheritdoc */
     public function getNextMiddleware()
     {
-        $return = array_shift($this->queue);
-        return $return ?? false;
+        return array_shift($this->queue);
     }
 }
