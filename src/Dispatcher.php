@@ -52,6 +52,9 @@ interface Dispatcher
     /**
      * Gets the next middleware in the queue.
      *
+     * @internal This method is for the delegate's use. You should not call
+     *      it directly.
+     *
      * @return MiddlewareInterface|null The next middleware. `null` if the
      *      queue is empty.
      */
@@ -61,6 +64,9 @@ interface Dispatcher
      * Gets an empty PSR-7 response with the given error code.
      *
      * Uses `500` if the given code is not a valid HTTP error code.
+     *
+     * This method is intended to be used by the delegate. You may call it if
+     * you need an error response.
      *
      * @param int $code HTTP error code.
      *
