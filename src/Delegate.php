@@ -8,6 +8,9 @@
 
 namespace Atanvarno\Middleware\Dispatch;
 
+/** SPL use block. */
+use Throwable, UnexpectedValueException;
+
 /** PSR-7 use block. */
 use Psr\Http\Message\{
     ResponseInterface, ServerRequestInterface
@@ -17,6 +20,8 @@ use Psr\Http\Message\{
 use Interop\Http\ServerMiddleware\{
     DelegateInterface, MiddlewareInterface
 };
+
+use Fig\Http\Message\StatusCodeInterface;
 
 /**
  * Atanvarno\Middleware\Dispatch\Delegate
@@ -61,9 +66,11 @@ class Delegate implements DelegateInterface
      *
      * Gets the next middleware from the dispatcher and gives it the request.
      * If no middleware is available (the queue is empty), calls the default
-     * action and returns the resulting response. If a response if not
-     * returned, falls back on the dispatcher's `getErrorResponse()` method
-     * and returns a `500` response.
+     * action and returns the resulting response.
+     *
+     * If a response if not returned, falls back on the dispatcher's
+     * `getErrorResponse()` method and returns a `500` response. In this case
+     * an E_USER_WARNING is triggered.
      *
      * @param ServerRequestInterface $request PSR-7 request to process.
      *
@@ -75,10 +82,21 @@ class Delegate implements DelegateInterface
         if ($middleware instanceof MiddlewareInterface) {
             return $middleware->process($request, $this);
         }
-        $response = call_user_func($this->default, ...$this->arguments);
-        if ($response instanceof ResponseInterface) {
-            return $response;
+        try {
+            $response = call_user_func(
+                $this->default, $request, ...$this->arguments
+            );
+            if (!$response instanceof ResponseInterface) {
+                $msg = 'Callable does not produce a response';
+                throw new UnexpectedValueException($msg);
+            }
+        } catch (Throwable $caught) {
+            $msg = 'User defined default action: ' . $caught->getMessage();
+            trigger_error($msg, E_USER_WARNING);
+            $response = $this->dispatcher->getErrorResponse(
+                StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR
+            );
         }
-        return $this->dispatcher->getErrorResponse(500);
+        return $response;
     }
 }

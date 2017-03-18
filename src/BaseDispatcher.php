@@ -44,7 +44,9 @@ abstract class BaseDispatcher extends ResponseProvider implements
         callable $default = null,
         array $arguments = []
     ): ResponseInterface {
-        $callable = $default ?? [$this, 'getEmptyResponse'];
+        $callable = $default ?? function(ServerRequestInterface $request) {
+            return $this->getEmptyResponse();
+        };
         $delegate = new Delegate($this, $callable, $arguments);
         return $delegate->process($request);
     }
