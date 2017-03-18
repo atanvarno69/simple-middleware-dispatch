@@ -33,9 +33,13 @@ interface Dispatcher
      * `callable` MUST return a PSR-7 response. If no end of queue action is
      * given, an empty PSR-7 will be generated and passed to the middleware.
      *
+     * The `callable` will be passed the request as its first argument. You
+     * may specify additional arguments to pass.
+     *
      * @param ServerRequestInterface $request   PSR-7 request.
      * @param callable|null          $default   End of queue action.
-     * @param array                  $arguments Arguments for end of queue action.
+     * @param array                  $arguments Additional arguments for the
+     *      end of queue action.
      *
      * @return ResponseInterface PSR-7 response.
      */
