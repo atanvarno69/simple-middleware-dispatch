@@ -8,8 +8,13 @@
 
 namespace Atanvarno\Middleware\Dispatch;
 
+/** SPL use block. */
+use Throwable, UnexpectedValueException;
+
 /** PSR-11 use block. */
-use Psr\Container\ContainerInterface;
+use Psr\Container\{
+    ContainerInterface, ContainerExceptionInterface
+};
 
 /** PSR-15 use block. */
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
@@ -91,7 +96,26 @@ class LazyLoadingDispatcher extends BaseDispatcher
     public function getNextMiddleware()
     {
         $id = array_shift($this->queue);
-        $return = $this->serviceLocator->get($id);
-        return ($return instanceof MiddlewareInterface) ? $return : null;
+        if ($id === null) {
+            return null;
+        }
+        try {
+            $return = $this->serviceLocator->get($id);
+            if (!$return instanceof MiddlewareInterface) {
+                throw new UnexpectedValueException();
+            }
+        } catch (Throwable $caught) {
+            $tail = '';
+            if ($caught instanceof ContainerExceptionInterface) {
+                $tail = $caught->getMessage();
+            }
+            if ($caught instanceof UnexpectedValueException) {
+                $tail = 'Middleware not returned';
+            }
+            $msg = sprintf('Error getting %s from container: %s', $id, $tail);
+            trigger_error($msg, E_USER_WARNING);
+            $return = null;
+        }
+        return $return;
     }
 }
