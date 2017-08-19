@@ -16,23 +16,20 @@
     ],
     "require": {
         "php": "^7.0",
-        "psr/container": "^1.0.0",
-        "http-interop/http-middleware": "^0.4.1",
-        "atanvarno/middleware-util": "^0.1.2"
+        "http-interop/http-middleware": "^0.4.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0.9",
-        "http-interop/http-factory-diactoros": "^0.2.0",
-        "atanvarno/dependency": "^1.1.0"
+        "http-interop/http-factory-diactoros": "^0.3.0"
     },
     "autoload": {
         "psr-4": {
-            "Atanvarno\\Middleware\\Dispatch\\": "src"
+            "Atanvarno\\Http\\Middleware\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Atanvarno\\Middleware\\Dispatch\\Test\\": "tests"
+            "Atanvarno\\Http\\Middleware\\Test\\": "tests"
         }
     },
     "minimum-stability": "dev",
