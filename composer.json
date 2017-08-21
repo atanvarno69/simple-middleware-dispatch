@@ -24,7 +24,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Atanvarno\\Middleware\\Dispatch": "src"
+            "Atanvarno\\Middleware\\Dispatch\\": "src"
         }
     },
     "autoload-dev": {
