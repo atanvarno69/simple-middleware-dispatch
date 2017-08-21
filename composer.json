@@ -24,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Atanvarno\\Http\\Middleware\\": "src"
+            "Atanvarno\\Middleware\\Dispatch": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Atanvarno\\Http\\Middleware\\Test\\": "tests"
+            "Atanvarno\\Middleware\\Dispatch\\Test\\": "tests"
         }
     },
     "minimum-stability": "dev",
