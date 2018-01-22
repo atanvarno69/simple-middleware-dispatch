@@ -9,7 +9,7 @@
 
 ## Installation
 ```bash
-$ composer require atanvarno/middleware-dispatch:^0.1.0
+$ composer require atanvarno/middleware-dispatch:^0.3.0
 ```
 
 ## Basic Usage
