@@ -32,6 +32,9 @@
             "Atanvarno\\Middleware\\Dispatch\\Test\\": "tests"
         }
     },
+    "provide": {
+        "psr/http-server-middleware-dispatcher-implementation": "1.0.0"
+    },
     "suggest": {
         "atanvarno/middleware-util": "Provides a final handler"
     },
