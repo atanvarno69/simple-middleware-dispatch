@@ -1,6 +1,6 @@
 {
-    "name": "atanvarno/middleware-dispatch",
-    "description": "PSR-15 middleware dispatcher",
+    "name": "atanvarno/simple-middleware-dispatch",
+    "description": "Basic PSR-15 middleware dispatcher",
     "keywords": [
         "PSR-15", "middleware", "dispatcher"
     ],
