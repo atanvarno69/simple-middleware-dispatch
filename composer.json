@@ -4,7 +4,7 @@
     "keywords": [
         "PSR-15", "middleware", "dispatcher"
     ],
-    "homepage": "https://github.com/atanvarno69/middleware-dispatch",
+    "homepage": "https://github.com/atanvarno69/simple-middleware-dispatch",
     "license": "MIT",
     "authors": [
         {
